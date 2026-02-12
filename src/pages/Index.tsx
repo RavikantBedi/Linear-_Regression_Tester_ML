@@ -143,18 +143,14 @@ const Index = () => {
 
             {/* Chart + Stats */}
             {regression && scatterData.length > 0 && (
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2">
-                  <RegressionChart
-                    data={scatterData}
-                    regression={regression}
-                    xLabel={xColumn}
-                    yLabel={yColumn}
-                  />
-                </div>
-                <div>
-                  <StatsPanel regression={regression} dataCount={scatterData.length} />
-                </div>
+              <div className="space-y-6">
+                <RegressionChart
+                  data={scatterData}
+                  regression={regression}
+                  xLabel={xColumn}
+                  yLabel={yColumn}
+                />
+                <StatsPanel regression={regression} dataCount={scatterData.length} />
               </div>
             )}
           </TabsContent>
