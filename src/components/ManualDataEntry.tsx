@@ -147,15 +147,26 @@ const ManualDataEntry = () => {
         ))}
       </div>
 
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={addPoint}
-        className="gap-2 font-mono text-xs border-primary/30 text-primary hover:bg-primary/10 mb-5"
-      >
-        <Plus className="h-3.5 w-3.5" />
-        Add Point
-      </Button>
+      <div className="flex gap-2 mb-5">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={addPoint}
+          className="gap-2 font-mono text-xs border-primary/30 text-primary hover:bg-primary/10"
+        >
+          <Plus className="h-3.5 w-3.5" />
+          Add Point
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => { nextId = 1; setPoints([createPoint(), createPoint(), createPoint()]); }}
+          className="gap-2 font-mono text-xs border-destructive/30 text-destructive hover:bg-destructive/10"
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+          Clear All
+        </Button>
+      </div>
 
       {/* Results */}
       {regression && scatterData.length >= 2 && (
