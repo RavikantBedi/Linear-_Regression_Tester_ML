@@ -1,13 +1,15 @@
 import { useState, useMemo, useCallback } from "react";
 import Papa from "papaparse";
 import { motion } from "framer-motion";
-import { Sparkles, Database } from "lucide-react";
+import { Sparkles, Database, FileUp, Keyboard } from "lucide-react";
 import FileUpload from "@/components/FileUpload";
 import ColumnSelector from "@/components/ColumnSelector";
 import RegressionChart from "@/components/RegressionChart";
 import StatsPanel from "@/components/StatsPanel";
+import ManualDataEntry from "@/components/ManualDataEntry";
 import { linearRegression } from "@/lib/regression";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Index = () => {
   const [rawData, setRawData] = useState<Record<string, string>[]>([]);
@@ -89,58 +91,80 @@ const Index = () => {
           </p>
         </motion.header>
 
-        {/* Upload Section */}
-        <div className="mb-6 space-y-4">
-          <FileUpload onFileLoaded={handleFileLoaded} />
-          {!rawData.length && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-              className="text-center"
-            >
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={loadSampleData}
-                className="gap-2 font-mono text-xs border-primary/30 text-primary hover:bg-primary/10 hover:text-primary"
-              >
-                <Database className="h-3.5 w-3.5" />
-                Load Sample Dataset
-              </Button>
-            </motion.div>
-          )}
-        </div>
+        {/* Tabs for CSV Upload vs Manual Entry */}
+        <Tabs defaultValue="csv" className="w-full">
+          <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 bg-secondary/60 mb-6">
+            <TabsTrigger value="csv" className="gap-2 font-mono text-xs data-[state=active]:bg-primary/20 data-[state=active]:text-primary">
+              <FileUp className="h-3.5 w-3.5" />
+              CSV Upload
+            </TabsTrigger>
+            <TabsTrigger value="manual" className="gap-2 font-mono text-xs data-[state=active]:bg-primary/20 data-[state=active]:text-primary">
+              <Keyboard className="h-3.5 w-3.5" />
+              Manual Entry
+            </TabsTrigger>
+          </TabsList>
 
-        {/* Column Selector */}
-        {numericColumns.length >= 2 && (
-          <div className="mb-6 flex justify-center">
-            <ColumnSelector
-              columns={numericColumns}
-              xColumn={xColumn}
-              yColumn={yColumn}
-              onXChange={setXColumn}
-              onYChange={setYColumn}
-            />
-          </div>
-        )}
+          <TabsContent value="csv">
+            {/* Upload Section */}
+            <div className="mb-6 space-y-4">
+              <FileUpload onFileLoaded={handleFileLoaded} />
+              {!rawData.length && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="text-center"
+                >
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={loadSampleData}
+                    className="gap-2 font-mono text-xs border-primary/30 text-primary hover:bg-primary/10 hover:text-primary"
+                  >
+                    <Database className="h-3.5 w-3.5" />
+                    Load Sample Dataset
+                  </Button>
+                </motion.div>
+              )}
+            </div>
 
-        {/* Chart + Stats */}
-        {regression && scatterData.length > 0 && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
-              <RegressionChart
-                data={scatterData}
-                regression={regression}
-                xLabel={xColumn}
-                yLabel={yColumn}
-              />
+            {/* Column Selector */}
+            {numericColumns.length >= 2 && (
+              <div className="mb-6 flex justify-center">
+                <ColumnSelector
+                  columns={numericColumns}
+                  xColumn={xColumn}
+                  yColumn={yColumn}
+                  onXChange={setXColumn}
+                  onYChange={setYColumn}
+                />
+              </div>
+            )}
+
+            {/* Chart + Stats */}
+            {regression && scatterData.length > 0 && (
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2">
+                  <RegressionChart
+                    data={scatterData}
+                    regression={regression}
+                    xLabel={xColumn}
+                    yLabel={yColumn}
+                  />
+                </div>
+                <div>
+                  <StatsPanel regression={regression} dataCount={scatterData.length} />
+                </div>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="manual">
+            <div className="max-w-2xl mx-auto">
+              <ManualDataEntry />
             </div>
-            <div>
-              <StatsPanel regression={regression} dataCount={scatterData.length} />
-            </div>
-          </div>
-        )}
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
