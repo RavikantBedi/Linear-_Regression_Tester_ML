@@ -20,11 +20,11 @@ const StatsPanel = ({ regression, dataCount }: StatsPanelProps) => {
       case "equation":
         return regression.equation;
       case "rSquared":
-        return regression.rSquared.toFixed(6);
+        return regression.rSquared.toFixed(10);
       case "slope":
-        return regression.slope.toFixed(6);
+        return regression.slope.toFixed(10);
       case "intercept":
-        return regression.intercept.toFixed(6);
+        return regression.intercept.toFixed(10);
       default:
         return "";
     }

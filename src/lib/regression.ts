@@ -40,7 +40,7 @@ export function linearRegression(
     { x: maxX, y: slope * maxX + intercept },
   ];
 
-  const equation = `y = ${slope.toFixed(4)}x + ${intercept.toFixed(4)}`;
+  const equation = `y = ${slope.toFixed(8)}x + ${intercept.toFixed(8)}`;
 
   return { slope, intercept, rSquared, equation, predictions };
 }
