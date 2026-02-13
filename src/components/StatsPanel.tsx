@@ -22,21 +22,21 @@ const StatsPanel = ({ regression, dataCount }: StatsPanelProps) => {
   const getValue = (key: string) => {
     switch (key) {
       case "equation":
-        return regression.equation;
+        return regression.equation ?? "N/A";
       case "rSquared":
-        return regression.rSquared.toFixed(10);
+        return (regression.rSquared ?? 0).toFixed(10);
       case "adjustedRSquared":
-        return regression.adjustedRSquared.toFixed(10);
+        return (regression.adjustedRSquared ?? 0).toFixed(10);
       case "slope":
-        return regression.slope.toFixed(10);
+        return (regression.slope ?? 0).toFixed(10);
       case "intercept":
-        return regression.intercept.toFixed(10);
+        return (regression.intercept ?? 0).toFixed(10);
       case "mae":
-        return regression.mae.toFixed(6);
+        return (regression.mae ?? 0).toFixed(6);
       case "mse":
-        return regression.mse.toFixed(6);
+        return (regression.mse ?? 0).toFixed(6);
       case "rmse":
-        return regression.rmse.toFixed(6);
+        return (regression.rmse ?? 0).toFixed(6);
       default:
         return "";
     }
