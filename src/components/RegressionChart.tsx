@@ -21,9 +21,10 @@ interface RegressionChartProps {
   regression: RegressionResult;
   xLabel: string;
   yLabel: string;
+  predictionPoint?: { x: number; y: number } | null;
 }
 
-const RegressionChart = ({ data, regression, xLabel, yLabel }: RegressionChartProps) => {
+const RegressionChart = ({ data, regression, xLabel, yLabel, predictionPoint }: RegressionChartProps) => {
   const chartRef = useRef<HTMLDivElement>(null);
 
   const handleDownload = useCallback(async () => {
@@ -54,12 +55,18 @@ const RegressionChart = ({ data, regression, xLabel, yLabel }: RegressionChartPr
   }, [regression]);
 
   const combined = useMemo(() => {
-    const map = new Map<number, any>();
+    const items: any[] = [];
     data.forEach((d) => {
-      map.set(Math.random(), { x: d.x, scatter: d.y });
+      items.push({ x: d.x, scatter: d.y });
     });
-    return [...Array.from(map.values()), ...lineData.map((d) => ({ x: d.x, line: d.line }))];
-  }, [data, lineData]);
+    lineData.forEach((d) => {
+      items.push({ x: d.x, line: d.line });
+    });
+    if (predictionPoint) {
+      items.push({ x: predictionPoint.x, prediction: predictionPoint.y });
+    }
+    return items;
+  }, [data, lineData, predictionPoint]);
 
   // Sort by x for line rendering
   combined.sort((a, b) => a.x - b.x);
@@ -126,6 +133,22 @@ const RegressionChart = ({ data, regression, xLabel, yLabel }: RegressionChartPr
             }}
           />
           <Scatter dataKey="scatter" fill="hsl(190 95% 50%)" fillOpacity={0.7} r={4} />
+          <Scatter
+            dataKey="prediction"
+            fill="hsl(45 100% 55%)"
+            fillOpacity={1}
+            r={8}
+            shape={(props: any) => {
+              const { cx, cy } = props;
+              if (cx == null || cy == null) return null;
+              return (
+                <g>
+                  <circle cx={cx} cy={cy} r={8} fill="hsl(45 100% 55%)" stroke="hsl(45 100% 35%)" strokeWidth={2} />
+                  <circle cx={cx} cy={cy} r={3} fill="hsl(45 100% 25%)" />
+                </g>
+              );
+            }}
+          />
           <Line
             dataKey="line"
             stroke="hsl(340 75% 55%)"
