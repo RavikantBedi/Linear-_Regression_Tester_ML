@@ -17,6 +17,7 @@ const Index = () => {
   const [numericColumns, setNumericColumns] = useState<string[]>([]);
   const [xColumn, setXColumn] = useState("");
   const [yColumn, setYColumn] = useState("");
+  const [predictionPoint, setPredictionPoint] = useState<{ x: number; y: number } | null>(null);
 
   const handleFileLoaded = useCallback((text: string) => {
     const result = Papa.parse<Record<string, string>>(text, {
@@ -150,9 +151,10 @@ const Index = () => {
                   regression={regression}
                   xLabel={xColumn}
                   yLabel={yColumn}
+                  predictionPoint={predictionPoint}
                 />
                 <StatsPanel regression={regression} dataCount={scatterData.length} />
-                <PredictionInput regression={regression} xLabel={xColumn} yLabel={yColumn} />
+                <PredictionInput regression={regression} xLabel={xColumn} yLabel={yColumn} onPredict={setPredictionPoint} />
               </div>
             )}
           </TabsContent>

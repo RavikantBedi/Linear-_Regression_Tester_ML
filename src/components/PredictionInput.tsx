@@ -9,16 +9,19 @@ interface PredictionInputProps {
   regression: RegressionResult;
   xLabel: string;
   yLabel: string;
+  onPredict: (point: { x: number; y: number } | null) => void;
 }
 
-const PredictionInput = ({ regression, xLabel, yLabel }: PredictionInputProps) => {
+const PredictionInput = ({ regression, xLabel, yLabel, onPredict }: PredictionInputProps) => {
   const [inputX, setInputX] = useState("");
   const [prediction, setPrediction] = useState<number | null>(null);
 
   const handlePredict = () => {
     const x = parseFloat(inputX);
     if (isNaN(x)) return;
-    setPrediction(regression.slope * x + regression.intercept);
+    const y = regression.slope * x + regression.intercept;
+    setPrediction(y);
+    onPredict({ x, y });
   };
 
   return (
