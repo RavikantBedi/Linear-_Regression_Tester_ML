@@ -6,6 +6,7 @@ import FileUpload from "@/components/FileUpload";
 import ColumnSelector from "@/components/ColumnSelector";
 import RegressionChart from "@/components/RegressionChart";
 import StatsPanel from "@/components/StatsPanel";
+import PredictionInput from "@/components/PredictionInput";
 import ManualDataEntry from "@/components/ManualDataEntry";
 import { linearRegression } from "@/lib/regression";
 import { Button } from "@/components/ui/button";
@@ -151,6 +152,7 @@ const Index = () => {
                   yLabel={yColumn}
                 />
                 <StatsPanel regression={regression} dataCount={scatterData.length} />
+                <PredictionInput regression={regression} xLabel={xColumn} yLabel={yColumn} />
               </div>
             )}
           </TabsContent>
